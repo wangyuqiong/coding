@@ -1,0 +1,43 @@
+<html>
+<head>
+	<title>Send a request</title>
+	<script src='http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha512.js'></script>
+</head>
+<body>
+	<script type='text/javascript'>
+		// function for adding a hidden field to target form
+		function addFieldToForm(target, key, val) {
+			var hidden_field = document.createElement('input');
+			hidden_field.setAttribute('type', 'hidden');
+			hidden_field.setAttribute('name', key);
+			hidden_field.setAttribute('value', val);
+			target.appendChild(hidden_field);
+		}
+		// function for generating and adding signature
+		function addSignature() {	
+			// assume already know player_id and player_salt 	
+			var player_id = 1234;
+			var player_salt = 'lowsodiumsalt';
+			// get all data to be hashed 
+			// signature is the sha512 hash of (salt, id, bet, won)
+			var coins_won = document.getElementById('form_won').value;
+			var coins_bet = document.getElementById('form_bet').value;	
+			var data = player_salt.concat(player_id, coins_bet, coins_won);
+			// make hash			
+			var hash = CryptoJS.SHA512(data);
+			// add player_id and signature to the form
+			var target_form = document.getElementById('spin_result_form');
+			addFieldToForm(target_form, 'id', player_id);
+			addFieldToForm(target_form, 'sig', hash);
+		}
+	</script>
+
+	<h3>Send a request: </h3>
+	<form id='spin_result_form' method='get' action='update.php' onsubmit='addSignature()'>
+		Coins bet <input id='form_bet' type='text' name='bet' value='1'><br>
+		Coins won <input id='form_won' type='text' name='won' value='0'><br>
+		<button type = 'submit'>Send</button>
+	</form>
+	
+</body>
+</html>

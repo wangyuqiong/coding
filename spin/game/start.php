@@ -1,7 +1,12 @@
 <?php
 	include "helper.php";	
-    $default_credit = 500;
     $default_bet = 1;
+    session_start();
+    $_SESSION["player_id"] = 1234;
+    $_SESSION["player_name"] = "Joan Wang";
+    $_SESSION["player_credit"] = 500;
+    $_SESSION["player_lifetime_spins"] = 0;
+    $_SESSION["player_salt_value"] = 0;
  ?>
 
 <html>
@@ -9,11 +14,10 @@
 	<title>Simple Spin</title>
 </head>
 <body>
-	<h2>Simple Spin</h2>
-	
-	<h3>Please input credit and bet amount:</h3>
+	<h2>Welcome <? echo $player_name; ?></h2>
+	<h3>Credit: <? echo $player_credit; ?></h3>
+	<h3>How much would you like to bet?</h3>
 	<form method="get" action="spin.php">
-		Credit <input type="text" name="credit" value="<? echo $default_credit; ?>"><br>
 		Betting <input type="text" name="bet" value="<? echo $default_bet; ?>"><br>
 		<button type="submit" name="spin" value="1">Play 1 Line</button>
 		<button type="submit" name="spin" value="3">Play 3 Lines</button>

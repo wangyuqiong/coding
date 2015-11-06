@@ -29,11 +29,14 @@ Using letters A, B, C, D, Y, Z in place of pictures
 */
 include "helper.php";	
 
-$user_credit = isset($_GET['credit']) ? (intval($_GET['credit'])) : 500;
+session_start(); 
+
+//$user_credit = isset($_GET['credit']) ? (intval($_GET['credit'])) : 500;
+$user_credit = $_SESSION["player_credit"];
 $play_lines  = isset($_GET['spin']) ? (intval($_GET['spin'])) : 3;
 $bet_per_line = isset($_GET['bet']) ? (intval($_GET['bet'])) : 1;
 
-$config_winnings = 0;
+$winning_current_spin = 0 - $bet_per_line * $play_lines; // start with bets placed, to be adjusted after spin
 $paytable_marker = Array();
 
 if($user_credit <= 0 || $bet_per_line * $play_lines > $user_credit) {
@@ -51,9 +54,6 @@ shuffle($reel[2]);
 // payout will be calculated from the first 1 (if 1 playline) or 3 (if 3 playline) triplets
 // e.g. if 1 playline, payout is calculated from ($reel[0][0], $reel[1][0], $reel[2][0])
 
-// first substract the bet
-$user_credit -= $bet_per_line * $play_lines;
-
 // calculate payout
 for($i = 0; $i < 3; $i++) {
 	$playline[$i] = array($reel[0][$i], $reel[1][$i], $reel[2][$i]);
@@ -65,9 +65,9 @@ for($i = 0; $i < 3; $i++) {
 	$playline_rowbg[$i] = "#ffffff";
 
 	if($playline_payout[$i] > 0) {
-		$playline_payout[$i] *= $bet_per_line;
-		$config_winnings += $playline_payout[$i]; 
-		$playline_payout_display[$i] = "You won $".$playline_payout[$i];
+		//$playline_payout[$i] *= $bet_per_line;
+		$winning_current_spin += $playline_payout[$i]; 
+		$playline_payout_display[$i] = "+".$playline_payout[$i];
 		$paytable_marker[] = $playline_payout[$i];
 		$playline_rowbg[$i] = "#99ff99"; 
 	}
@@ -77,8 +77,9 @@ for($i = 0; $i < 3; $i++) {
 	}
 }
 
-// add winnings, initial value $config_winnings = 0
-$user_credit += $config_winnings;
+// adjust credit
+$user_credit += $winning_current_spin;
+$_SESSION["player_credit"] = $user_credit;
 ?>
 
 <html>
@@ -107,10 +108,9 @@ $user_credit += $config_winnings;
 			</tr>
 		<?
 		}
-		if($config_winnings == 0) {
-			echo "You lost $".($play_lines * $bet_per_line);
-		}
 		?>
 	</table>
+
+	<h3>You <? echo ($winning_current_spin >= 0 ? " won $" : "  lost $").abs($winning_current_spin); ?></h3>
 </body>
 </html>

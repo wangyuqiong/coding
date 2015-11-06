@@ -1,6 +1,5 @@
 # function to find all years with the most number of people alive
 def findYear(file):
-    print("Reading " + file)
     data = []
     with open(file, "rb") as fp:
         for i in fp.readlines():
@@ -28,9 +27,18 @@ def findYear(file):
     for year, number in result.items():
         if number == max_number:
             all_years.append(year)
+    all_years.sort()
     return [all_years, max_number]
 
-year, number = findYear("test3.txt")
-print("Year(s) with most people alive ({} people):".format(number))
-year.sort()
-for i in year: print(i, sep = '\n')
+def test(file):
+    print("====================  TEST STARTED ====================")
+    print("Reading " + file)
+    year, number = findYear(file)
+    print("Year(s) with most people alive ({} people):".format(number))    
+    for i in year: print(i, sep = '\n')
+    print("====================  TEST ENDED ====================")
+
+
+test("test1.txt")
+test("test2.txt")
+test("test3.txt")
