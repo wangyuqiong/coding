@@ -16,7 +16,7 @@ Please see db.sql for database info
 
 ## Usage
 
-1. Put update.php on a server
+1. Put update.php on the server
 2. Construct database based on db.sql
 3. Run player.html
 4. Enter desired amount then click on “Send”

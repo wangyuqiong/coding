@@ -116,7 +116,6 @@
         array('LifetimeSpins', $player_lifetime_spins),
         array('LifetimeAverageReturn',  $lifetime_average_return)
     );
-    //var_dump($json_data);
     $json = json_encode($json_data);
     echo $json;
 
