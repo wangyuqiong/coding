@@ -10,15 +10,18 @@
 - Server performs initial checks on the request
 - If the initial check passes, the sever retrieves the player’s salt value from the database based on player id
 - Server then tries to regenerate the hash using the retrieved salt value and received data (player id, coins won, coins bet)
-- If the regenerated hash matches the received hash, the server updates the record
+- If the regenerated hash matches the received hash, the server updates the record and generates the JSON response
 
-- Please see db.sql for database info
+Please see db.sql for database info
 
 ## Usage
 
-1. Open player.html
-2. Enter desired amount then click on “Send”
-3. JSON response will be displayed
+1. Put update.php on a server
+2. Construct database based on db.sql
+3. Run player.html
+4. Enter desired amount then click on “Send”
+5. JSON response will be displayed
+6. Click the back button or open another player.html to submit another request
 
 ## Demo 
 
